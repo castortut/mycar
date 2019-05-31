@@ -16,7 +16,8 @@ import os
 from docopt import docopt
 
 import donkeycar as dk
-from donkeycar.parts.camera import PiCamera
+#from donkeycar.parts.camera import PiCamera
+from donkeycar.parts.camera import CSICamera
 from donkeycar.parts.transform import Lambda
 from donkeycar.parts.keras import KerasLinear
 from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
@@ -43,8 +44,10 @@ def drive(cfg, model_path=None, use_joystick=False, use_chaos=False):
     clock = Timestamp()
     V.add(clock, outputs=['timestamp'])
 
-    cam = PiCamera(resolution=cfg.CAMERA_RESOLUTION)
-    V.add(cam, outputs=['cam/image_array'], threaded=True)
+#    cam = PiCamera(resolution=cfg.CAMERA_RESOLUTION)
+#    V.add(cam, outputs=['cam/image_array'], threaded=True)
+    cam = CSICamera(resolution=cfg.CAMERA_RESOLUTION)
+    V.add(cam, outputs=['cam/image_array'], threaded=False)
 
     if use_joystick or cfg.USE_JOYSTICK_AS_DEFAULT:
 #        ctr = JoystickController(max_throttle=cfg.JOYSTICK_MAX_THROTTLE,
