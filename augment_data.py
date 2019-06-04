@@ -14,6 +14,7 @@ Options:
 """
 import os
 import sys
+import time
 import copy
 import argparse
 import random
@@ -88,8 +89,9 @@ def augment(tub_names, new_data_dir, args):
 
     new_tub = Tub(new_data_dir_full)
 
+    t0 = time.time()
+
     i=0
-    div_last=0
     for tub in tubgroup.tubs:
         for ix in tub.get_index(shuffled=False):
             record = tub.get_record(ix)
@@ -100,8 +102,12 @@ def augment(tub_names, new_data_dir, args):
                     sys.stdout.write('.')
                     sys.stdout.flush()
                     i=0
-    sys.stdout.write("\nFinished augmenting all records to %." % (new_data_dir_full) )
+    sys.stdout.write("\nFinished augmenting all records to %s.\n" % (new_data_dir_full) )
     sys.stdout.flush()
+
+    t1 = time.time()
+    t_delta_mins = (t1-t0)/60
+    sys.stdout.write("It took %f minutes.\n" % (t_delta_mins))
 
 
 def flip(record):
